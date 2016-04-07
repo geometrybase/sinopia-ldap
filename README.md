@@ -1,7 +1,7 @@
 # sinopia-altldap
 
 An simpler alternative to [sinopia-ldap](https://github.com/rlidwka/sinopia-ldap)
-which doesn't require an ldap admin account.  If you can performa a bind
+which doesn't require an ldap admin account.  If you can perform a bind
 against the configured ldap url, you are granted access.
 
 
