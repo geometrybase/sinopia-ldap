@@ -33,7 +33,7 @@ client_options are passed directly to [ldap.createClient](http://ldapjs.org/clie
 It's called as:
 
 ```js
-require('sinopia-ldap')(config, stuff)
+require('sinopia-altldap')(config, stuff)
 ```
 
 Where:
