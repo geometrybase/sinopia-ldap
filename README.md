@@ -1,9 +1,15 @@
+# sinopia-altldap
+
+An simpler alternative to [sinopia-ldap](https://github.com/rlidwka/sinopia-ldap)
+which doesn't require an ldap admin account.  If you can performa a bind
+against the configured ldap url, you are granted access.
+
 
 ## Installation
 
 ```sh
 $ npm install sinopia
-$ npm install sinopia-ldap
+$ npm install sinopia-altldap
 ```
 
 ## Config
@@ -12,22 +18,15 @@ Add to your `config.yaml`:
 
 ```yaml
 auth:
-  ldap:
+  altldap:
     type: ldap
-    groupNameAttribute: 'cn'
     client_options:
       url: "ldaps://ldap.example.com"
-      adminDn: "cn=admin,dc=example,dc=com"
-      adminPassword: "admin"
-      searchBase: "ou=People,dc=example,dc=com"
-      searchFilter: "(uid={{username}})"
-      cache: False
-      searchAttributes:
-        - "*"
-        - memberOf
       tlsOptions:
         rejectUnauthorized: False
 ```
+
+client_options are passed directly to [ldap.createClient](http://ldapjs.org/client.html#create-a-client).
 
 ## For plugin writers
 
