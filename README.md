@@ -20,11 +20,15 @@ Add to your `config.yaml`:
 auth:
   altldap:
     type: ldap
+    domain: example.com
     client_options:
       url: "ldaps://ldap.example.com"
       tlsOptions:
         rejectUnauthorized: False
 ```
+
+If the domain option is supplied it is appended to the username so that users don't have to type
+the full <user>@<domain> to login.
 
 client_options are passed directly to [ldap.createClient](http://ldapjs.org/client.html#create-a-client).
 
