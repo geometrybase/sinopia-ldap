@@ -27,10 +27,10 @@ auth:
         rejectUnauthorized: False
 ```
 
-If the domain option is supplied it is appended to the username so that users don't have to type
-the full <user>@<domain> to login.
+If the ```domain``` option is supplied it is appended to the username so that users don't have to type
+the full ```<user>@<domain>``` to login.
 
-client_options are passed directly to [ldap.createClient](http://ldapjs.org/client.html#create-a-client).
+```client_options``` are passed directly to [ldap.createClient](http://ldapjs.org/client.html#create-a-client).
 
 ## For plugin writers
 
