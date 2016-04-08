@@ -1,6 +1,6 @@
 {
   "name": "sinopia-altldap",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Alternate LDAP Auth plugin for Sinopia",
   "main": "index.js",
   "scripts": {
