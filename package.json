@@ -1,25 +1,28 @@
 {
-  "name"                : "sinopia-ldap",
-  "version"             : "0.5.1",
-  "description"         : "LDAP auth plugin for sinopia",
-
-  "author"              : { "name": "Alex Kocharin"
-                          , "email": "alex@kocharin.ru" },
-
-  "repository"          : { "type": "git"
-                          , "url": "git://github.com/rlidwka/sinopia-ldap" },
-
-  "dependencies"        : { "ldapauth-fork": ">= 2.2.12"
-                          , "ldapjs": ">= 0.7.1" },
-
-  "devDependencies"     : { "mocha": ">=1.17.0 <2.0.0-0" },
-
-  "scripts"             : { "test": "mocha ./tests" },
-
-  "keywords"            : [ "sinopia", "auth", "plugin", "ldap" ],
-
-  "publishConfig"       : { "registry": "https://registry.npmjs.org/" },
-
-  "license"             : { "type": "WTFPL"
-                          , "url": "http://www.wtfpl.net/txt/copying/" }
+  "name": "sinopia-altldap",
+  "version": "0.0.4",
+  "description": "Alternate LDAP Auth plugin for Sinopia",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ValidUSA/sinopia-altldap.git"
+  },
+  "keywords": [
+    "sinopia",
+    "auth",
+    "plugin",
+    "ldap"
+  ],
+  "author": "tepaul@validusa.com",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/ValidUSA/sinopia-altldap/issues"
+  },
+  "homepage": "https://github.com/ValidUSA/sinopia-altldap#readme",
+  "dependencies": {
+    "ldapjs": "^1.0.0"
+  }
 }

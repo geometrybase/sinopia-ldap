@@ -1,73 +1,46 @@
-var crypto = require('crypto')
-var assert = require('assert')
-var LdapAuth = require('ldapauth-fork')
-var parseDN = require('ldapjs').parseDN
+var ldap = require("ldapjs");
 
-module.exports = Auth
+module.exports = Auth;
 
 function Auth(config, stuff) {
-  var self = Object.create(Auth.prototype)
-  self._users = {}
-
-  // config for this module
-  self._config = config
-
-  // sinopia logger
-  self._logger = stuff.logger
-
-  // TODO: Set more defaults
-  self._config.groupNameAttribute = self._config.groupNameAttribute || 'cn'
-
-  return self
+    var self = Object.create(Auth.prototype);
+    self._users = {};
+    self._config = config;
+    self._logger = stuff.logger;
+    return self;
 }
 
-//
-// Attempt to authenticate user against LDAP backend
-//
-Auth.prototype.authenticate = function(user, password, callback) {
-  var self = this
-  var LdapClient = new LdapAuth(self._config.client_options)
-
-  LdapClient.authenticate(user, password, function(err, ldap_user) {
-    if (err) {
-      // 'No such user' is reported via error
-      self._logger.warn({
-        user: user,
-        err: err,
-      }, 'LDAP error @{err}')
-
-      LdapClient.close(function(err) {
-        if (err) {
-          self._logger.warn({
-             err: err
-            }, 'LDAP error on close @{err}')
-         }
-      })
-
-      return callback(null, false)
-    }
-
-    if (ldap_user) {
-      var groups = [ user ]
-      if ('memberOf' in ldap_user) {
-        if (!Array.isArray(ldap_user.memberOf)) {
-          ldap_user.memberOf = [ ldap_user.memberOf ]
+Auth.prototype.authenticate = function(user, password, auth_callback) {
+    var self = this,
+        domain = self._config.domain,
+        client = ldap.createClient(self._config.client_options),
+        callback = function(error, groups) {
+            client.unbind();
+            return auth_callback(error, groups);
+        };
+    if (domain) {
+        if (user.indexOf("@") !== -1 && user.split("@").pop() !== domain) {
+            self._logger.warn({user: user}, "Rejected auth due to invalid domain: @{user}");
+            return callback(null, false);
         }
-        for (var i = 0; i < ldap_user.memberOf.length; i++) {
-          groups.push("%" + parseDN(ldap_user.memberOf[i]).rdns[0][self._config.groupNameAttribute])
+        if (user.indexOf("@") === -1) {
+            user += "@" + domain;
         }
-      }
     }
-
-    callback(null, groups)
-
-    LdapClient.close(function(err) {
-      if (err) {
-        self._logger.warn({
-           err: err
-          }, 'LDAP error on close @{err}')
-       }
-    })
-
-  })
+    client.bind(user, password, function(error) {
+        var groups = [];
+        if (error) {
+            if (error.name === "InvalidCredentialsError") {
+                self._logger.warn({user: user}, "Invalid Credentials for user: @{user}");
+                return callback(null, false);
+            }
+            self._logger.error({err: error}, "LDAP bind failed: @{err}");
+            return callback("Unable to authenticate against LDAP");
+        }
+        if (domain) {
+            groups.push(user.split("@")[0]);
+        }
+        groups.push(user);
+        return callback(null, groups);
+    });
 }
